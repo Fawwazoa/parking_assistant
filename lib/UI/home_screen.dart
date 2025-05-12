@@ -16,11 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String _recommendation = '';
   bool _isLoading = false;
+  bool _showImages = false;
+  List<File> _parkingImages = [];
 
   Future<void> _analyzeParkingImages() async {
     setState(() {
       _isLoading = true;
       _recommendation = '';
+      _parkingImages = [];
     });
 
     try {
@@ -29,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       setState(() {
         _recommendation = result.trim();
+        _parkingImages = images;
       });
     } catch (e) {
       setState(() {
@@ -54,6 +58,65 @@ class _HomeScreenState extends State<HomeScreen> {
       child: const Text('Analyze Parking'),
     );
   }
+
+  Widget _buildToggleImagesButton() {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          _showImages = !_showImages;
+        });
+      },
+      child: Text(
+        _showImages ? 'Hide Parking Images' : 'Show Parking Images',
+        style: const TextStyle(color: Colors.tealAccent, fontSize: 16),
+      ),
+    );
+  }
+
+ Widget _buildImagesGallery() {
+  if (!_showImages || _parkingImages.isEmpty) return const SizedBox.shrink();
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 12),
+    child: Center(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _parkingImages.map((imageFile) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.tealAccent.withOpacity(0.5)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 6,
+                      offset: const Offset(2, 2),
+                    )
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.file(
+                    imageFile,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    ),
+  );
+}
+
+
 
   Widget _buildRecommendationCard() {
     if (_recommendation.isEmpty) return const SizedBox.shrink();
@@ -107,18 +170,24 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildAnalyzeButton(),
-              const SizedBox(height: 40),
-              if (_isLoading)
-                const CircularProgressIndicator(
-                  color: Colors.tealAccent,
-                )
-              else
-                _buildRecommendationCard(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildAnalyzeButton(),
+                const SizedBox(height: 20),
+                _buildToggleImagesButton(),
+                const SizedBox(height: 10),
+                _buildImagesGallery(),
+                const SizedBox(height: 30),
+                if (_isLoading)
+                  const CircularProgressIndicator(
+                    color: Colors.tealAccent,
+                  )
+                else
+                  _buildRecommendationCard(),
+              ],
+            ),
           ),
         ),
       ),
