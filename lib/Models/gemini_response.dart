@@ -8,4 +8,4 @@ class GeminiResponse {
       generatedText: json['candidates'][0]['content']['parts'][0]['text'],
     );
   }
-}//comment
+}
