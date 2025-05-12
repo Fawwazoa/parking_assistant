@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1035477081562",
+    "project_id": "parking-assistant-3e6cd",
+    "storage_bucket": "parking-assistant-3e6cd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035477081562:android:c304d76733ee1180c874e3",
+        "android_client_info": {
+          "package_name": "com.example.parking_assistant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj2GYDwtiquawuB21oltYCPsq-4zMTtMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
